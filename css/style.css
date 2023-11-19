@@ -1,4 +1,66 @@
 @import url("card_recipe_template.css");
+html {
+  overflow-x: hidden;
+  margin: 0 auto;
+}
+
 body {
   background: lightgrey;
+  margin: 0 auto;
+}
+
+header h1 {
+  font-family: "Anton", sans-serif;
+  color: #ffd15b;
+  text-align: center;
+  margin: 0;
+}
+header h3 {
+  font-family: "Anton", sans-serif;
+  color: white;
+}
+
+.header-title {
+  background-image: url("/assets/images/bg_lespetitplats.jpg");
+  height: 500px;
+  width: 100vw;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: top;
+}
+.header-title .title {
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  margin-bottom: 100px;
+  padding: 0;
+  position: relative;
+  left: 40px;
+}
+.header-title fa-bullseye {
+  color: white;
+}
+
+.header-searchbar {
+  width: 100%;
+  text-align: center;
+  margin: 20px;
+}
+.header-searchbar input {
+  width: 700px;
+  height: 50px;
+  border-radius: 11px;
+}
+
+.fa-magnifying-glass {
+  position: relative;
+  left: -45px;
+  color: white;
+  background: black;
+  padding: 12px;
+  border-radius: 10px;
+}
+
+.navbar-filter {
+  display: flex;
 }/*# sourceMappingURL=style.css.map */
