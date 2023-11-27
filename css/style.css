@@ -69,4 +69,10 @@ header h3 {
 
 .navbar-filter {
   display: flex;
+}
+
+.suggestions .suggestions-li {
+  color: white;
+  background: grey;
+  border: 1px solid black;
 }/*# sourceMappingURL=style.css.map */
