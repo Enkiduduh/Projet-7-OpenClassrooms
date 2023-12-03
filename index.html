@@ -24,13 +24,32 @@
           <input id="searchbar" type="text" value="Rechercher une recette, un ingrédient, ..."><i id="search-icon" class="fa-solid fa-magnifying-glass"></i>
         </div>
         <ul class="suggestions">
-          
+
         </ul>
       </div>
       <nav class="navbar-filter">
-        <select name="Ingrédients" id="Ingrédients" ></select>
-        <select name="Appareils" id="Appareils"></select>
-        <select name="Ustensiles" id="Ustensiles"></select>
+
+        <div class="filter-container">
+          <div class="filter" id="filter-ingredients"><span>Ingrédients</span><i class="fa-solid fa-angle-down" id="ingredients-icon"></i></div>
+          <div class="filter-hidden">
+            <div class="filter-wrapper">
+              <input type="text" class="filter-input" id="filter-ingredients-input"><i class="fa-solid fa-magnifying-glass filter-search-icon"></i>
+            </div>
+            <div class="filter-list">
+              <span>test</span>
+              
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-container">
+          <div class="filter"  id="filter-appareils"><span>Appareils</span><i class="fa-solid fa-angle-down"></i></div>
+        </div>
+
+        <div class="filter-container">
+          <div class="filter"  id="filter-ustensils"><span>Ustensils</span><i class="fa-solid fa-angle-down"></i></div>
+        </div>
+
         <p>1500 recettes</p>
       </nav>
     </header>

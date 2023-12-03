@@ -57,7 +57,7 @@ header {
       color: grey;
     }
   }
-  .fa-magnifying-glass{
+  #search-icon{
     position: relative;
     left: -45px;
     color: white;
@@ -69,7 +69,43 @@ header {
 
 .navbar-filter {
   display : flex;
+  margin: 20px auto;
+  font-family: $font-family-text;
+  font-size: 12px;
 }
+.filter-container {
+  background: white;
+  border-radius: 8px;
+  padding: 10px;
+  margin: 0 50px;
+  width: 150px;
+}
+.filter-search-icon {
+  position:absolute;
+  top: 561px;
+  left: 438px;
+  color: lightgrey;
+}
+.filter {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.filter-input {
+  margin: 10px 0;
+  width: 140px;
+}
+.filter-list {
+  display: flex;
+  flex-direction: column;
+}
+.filter-hidden {
+  display : none;
+}
+.filter-visible {
+  display : block;
+}
+
 
 .suggestions {
   .suggestions-li {
