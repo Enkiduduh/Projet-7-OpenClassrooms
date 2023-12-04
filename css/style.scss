@@ -69,9 +69,13 @@ header {
 
 .navbar-filter {
   display : flex;
-  margin: 20px auto;
+  margin: 20px ;
   font-family: $font-family-text;
   font-size: 12px;
+  p {
+    font-family: $font-family-title;
+    font-size: 18px;
+  }
 }
 .filter-container {
   background: white;
@@ -98,6 +102,10 @@ header {
 .filter-list {
   display: flex;
   flex-direction: column;
+  height: 140px;
+  overflow-y:scroll;
+  scrollbar-width:none;
+
 }
 .filter-hidden {
   display : none;

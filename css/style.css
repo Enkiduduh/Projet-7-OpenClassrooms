@@ -69,9 +69,13 @@ header h3 {
 
 .navbar-filter {
   display: flex;
-  margin: 20px auto;
+  margin: 20px;
   font-family: "manrope", sans-serif;
   font-size: 12px;
+}
+.navbar-filter p {
+  font-family: "Anton", sans-serif;
+  font-size: 18px;
 }
 
 .filter-container {
@@ -103,6 +107,9 @@ header h3 {
 .filter-list {
   display: flex;
   flex-direction: column;
+  height: 140px;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 
 .filter-hidden {
