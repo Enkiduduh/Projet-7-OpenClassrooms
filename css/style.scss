@@ -83,13 +83,15 @@ header {
   padding: 10px;
   margin: 0 50px;
   width: 150px;
+  position:relative;
+  z-index: 2;
 }
-.filter-search-icon {
-  position:absolute;
-  top: 561px;
-  left: 438px;
-  color: lightgrey;
-}
+// .filter-search-icon {
+//   position:absolute;
+//   top: 561px;
+//   left: 438px;
+//   color: lightgrey;
+// }
 .filter {
   display: flex;
   justify-content: space-between;
@@ -99,15 +101,17 @@ header {
   margin: 10px 0;
   width: 140px;
 }
-.filter-list {
+.filter-list-ingredients, .filter-list-appareils, .filter-list-ustensils {
   display: flex;
   flex-direction: column;
   height: 140px;
   overflow-y:scroll;
   scrollbar-width:none;
-
+  span {
+    padding: 2px 0;
+  }
 }
-.filter-hidden {
+.filter-hidden-ingredients, .filter-hidden-ustensils, .filter-hidden-appareils {
   display : none;
 }
 .filter-visible {

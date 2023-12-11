@@ -35,83 +35,60 @@ async function init() {
 }
 
 init();
-console.log(recipesList);
 
-// function searchInRecipes(arrayOfRecipes, input) {
-//     const temporyRecipesArr = [];
-//     console.log("1");
-//     if (input.length >= 3) {
-//       console.log("2");
-//         arrayOfRecipes.forEach(recipe => {
-//             const lowerInput = input.toLowerCase();
-//             console.log("3");
-//             if (recipe.name.toLowerCase().includes(lowerInput) ||
-//                 recipe.description.toLowerCase().includes(lowerInput) ||
-//                 recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(lowerInput))
-//             ) {
-//                 temporyRecipesArr.push(recipe);
-//                 console.log("4");
-//                 console.log(temporyRecipesArr);
-//                 console.log("5");
-//             }
-//             console.log("6");
-//         });
-//         console.log("7");
-//         displayData(temporyRecipesArr);
-//         console.log("8");
-//       }
-// }
+
+function searchInRecipes(arrayOfRecipes, input) {
+    const temporyRecipesArr = [];
+    if (input.length >= 3) {
+        const searchIcon = document.getElementById("search-icon");
+        const recipesSection = document.querySelector(".card-recipe-container");
+        searchIcon.addEventListener("click", function() {
+            recipesSection.innerHTML = "";
+            arrayOfRecipes.forEach(recipe => {
+                const lowerInput = input.toLowerCase();
+                if (recipe.name.toLowerCase().includes(lowerInput) ||
+                    recipe.description.toLowerCase().includes(lowerInput) ||
+                    recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(lowerInput))
+                ) {
+                    temporyRecipesArr.push(recipe);
+                }
+            });
+            displayData(temporyRecipesArr);
+        });
+    }
+}
 
 const searchBar = document.getElementById("searchbar");
-// searchBar.addEventListener("input", function(){
-//   console.log("Input event triggered");
-//     searchInRecipes(recipesList, searchBar.value);
-// });
+searchBar.addEventListener("click", function(){
+    searchBar.value = "";
+    searchBar.addEventListener("input", function(){
+        console.log("Input event triggered");
+        searchBar.textContent = "";
+        searchInRecipes(recipesList, searchBar.value);
+    });
+});
 
-searchBar.addEventListener("input", function(event){
-    const recipesSection = document.querySelector(".card-recipe-container");
-    const suggestions = document.querySelector(".suggestions");
-    const regExp = /^[a-zA-Z]{3,}$/;
-    const match = regExp.test(event.target.value);
-    const searchIcon = document.getElementById("search-icon");
-    suggestions.textContent = "";
-    searchIcon.addEventListener("click", function() {
-      if (event.target.value === "") {
-        displayData(recipesList);
-      }
-        if (match) {
-          const tempRecipeArray = [];
-          console.log("palier 1")
-          recipesList.forEach((recipe) => {
-              const name = recipe.name;
-              const ustenstil = recipe.ustentils;
-              const description = recipe.description;
-              if (name.toLowerCase().includes(`${event.target.value}`) || description.toLowerCase().includes(`${event.target.value}`)) {
-                  tempRecipeArray.push(recipe)
-                  suggestions.innerHTML = `
-                  <li>${recipe.id}</li>`;
-              }
-          })
-              recipesSection.innerHTML = "";
-              displayData(tempRecipeArray)
-        }
-    })
-})
 
 const filterIngredients = document.getElementById("filter-ingredients");
 const ingredientsIcon = document.getElementById("ingredients-icon");
-const filterHidden = document.querySelector(".filter-hidden");
-const filterList = document.querySelector(".filter-list");
-const ingredientsArr = [];
 
+
+
+
+
+
+
+const filterHiddenIngredients = document.querySelector(".filter-hidden-ingredients");
+const filterListIngredients = document.querySelector(".filter-list-ingredients");
 const InputFilterIngredients = document.getElementById("filter-ingredients-input");
+const ingredientsArr = [];
 
 filterIngredients.addEventListener("click", function(){
     ingredientsIcon.classList.toggle("fa-angle-down");
     ingredientsIcon.classList.toggle("fa-angle-up");
-    filterHidden.classList.toggle("filter-hidden");
-    filterHidden.classList.toggle("filter-visible");
-    filterList.innerHTML = "";
+    filterHiddenIngredients.classList.toggle("filter-hidden");
+    filterHiddenIngredients.classList.toggle("filter-visible");
+    filterListIngredients.innerHTML = "";
     recipesList.forEach((recipe) => {
         const name = recipe.name;
         if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
@@ -125,6 +102,84 @@ filterIngredients.addEventListener("click", function(){
     console.log(ingredientsArr);
     const arrayIngredientsUniques = [...new Set(ingredientsArr)];
     for (let i = 0; i < arrayIngredientsUniques.length; i++) {
-        filterList.innerHTML +=`<span>${arrayIngredientsUniques[i]}</span>`;
+      filterListIngredients.innerHTML +=`<span>${arrayIngredientsUniques[i]}</span>`;
     }
 })
+
+
+// function filterByTag(arrayOfRecipes, input) {
+//     filterHidden.classList.toggle("filter-hidden");
+//     filterHidden.classList.toggle("filter-visible");
+//     const ingredientsArr = [];
+//     const appareilsArr = [];
+//     const ustensilesArr = [];
+//     arrayOfRecipes.forEach((recipe) => {
+//         if (recipe.appliance) {
+//           appareilsArr.push(recipe.appliance);
+//         }
+//     });
+// }
+
+
+// appareilsIcon.classList.toggle("fa-angle-down");
+// appareilsIcon.classList.toggle("fa-angle-up");
+// ustensilsIcon.classList.toggle("fa-angle-down");
+// ustensilsIcon.classList.toggle("fa-angle-up");
+
+const filterAppareils = document.getElementById("filter-appareils");
+const appareilsIcon = document.getElementById("ingredients-icon");
+const filterListAppareils = document.querySelector(".filter-list-appareils");
+const filterHiddenAppareils = document.querySelector(".filter-hidden-appareils");
+const appareilsArr = [];
+
+
+filterAppareils.addEventListener("click", function(){
+  appareilsIcon.classList.toggle("fa-angle-down");
+  appareilsIcon.classList.toggle("fa-angle-up");
+  filterHiddenAppareils.classList.toggle("filter-hidden-appareils");
+  filterHiddenAppareils.classList.toggle("filter-visible");
+  filterListAppareils.innerHTML = "";
+  recipesList.forEach((recipe) => {
+      const name = recipe.name;
+      if (recipe.appliance) {
+        appareilsArr.push(recipe.appliance);
+      }
+  })
+  const arrayAppareilsUniques = [...new Set(appareilsArr)];
+  for (let i = 0; i < arrayAppareilsUniques.length; i++) {
+      filterListAppareils.innerHTML +=`<span>${arrayAppareilsUniques[i]}</span>`;
+  }
+})
+
+
+const filterUstensils = document.getElementById("filter-ustensils");
+const ustensilsIcon = document.getElementById("ingredients-icon");
+const filterListUstensils = document.querySelector(".filter-list-ustensils");
+const filterHiddenUstensils = document.querySelector(".filter-hidden-ustensils");
+const ustensilsArr = [];
+
+
+filterUstensils.addEventListener("click", function(){
+  ustensilsIcon.classList.toggle("fa-angle-down");
+  ustensilsIcon.classList.toggle("fa-angle-up");
+  filterHiddenUstensils.classList.toggle("filter-hidden-ustensils");
+  filterHiddenUstensils.classList.toggle("filter-visible");
+  filterListUstensils.innerHTML = "";
+  recipesList.forEach((recipe) => {
+      const name = recipe.name;
+      if (recipe.ustensils) {
+        ustensilsArr.push(recipe.ustensils);
+      }
+  })
+  console.log(ustensilsArr);
+  const flattenedUstensils = ustensilsArr.flat();
+  const arrayUstensilsUniques = [...new Set(flattenedUstensils)];
+  for (let i = 0; i < arrayUstensilsUniques.length; i++) {
+      filterListUstensils.innerHTML +=`<span class="">${capitalize(arrayUstensilsUniques[i])}</span>`;
+  }
+})
+
+
+function capitalize(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
