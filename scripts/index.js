@@ -42,7 +42,7 @@ function searchInRecipes(arrayOfRecipes, input) {
     if (input.length >= 3) {
         const searchIcon = document.getElementById("search-icon");
         const recipesSection = document.querySelector(".card-recipe-container");
-        searchIcon.addEventListener("click", function() {
+        // searchIcon.addEventListener("click", function() {
             recipesSection.innerHTML = "";
             arrayOfRecipes.forEach(recipe => {
                 const lowerInput = input.toLowerCase();
@@ -54,7 +54,7 @@ function searchInRecipes(arrayOfRecipes, input) {
                 }
             });
             displayData(temporyRecipesArr);
-        });
+        // });
     }
 }
 
@@ -69,117 +69,66 @@ searchBar.addEventListener("click", function(){
 });
 
 
-const filterIngredients = document.getElementById("filter-ingredients");
-const ingredientsIcon = document.getElementById("ingredients-icon");
-
-
-
-
-
-
-
-const filterHiddenIngredients = document.querySelector(".filter-hidden-ingredients");
-const filterListIngredients = document.querySelector(".filter-list-ingredients");
-const InputFilterIngredients = document.getElementById("filter-ingredients-input");
-const ingredientsArr = [];
-
-filterIngredients.addEventListener("click", function(){
-    ingredientsIcon.classList.toggle("fa-angle-down");
-    ingredientsIcon.classList.toggle("fa-angle-up");
-    filterHiddenIngredients.classList.toggle("filter-hidden");
-    filterHiddenIngredients.classList.toggle("filter-visible");
-    filterListIngredients.innerHTML = "";
-    recipesList.forEach((recipe) => {
-        const name = recipe.name;
-        if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
-            recipe.ingredients.forEach((ingredient) => {
-                if (ingredient && ingredient.ingredient) {
-                  ingredientsArr.push(ingredient.ingredient);
-                }
-            });
-        }
-    })
-    console.log(ingredientsArr);
-    const arrayIngredientsUniques = [...new Set(ingredientsArr)];
-    for (let i = 0; i < arrayIngredientsUniques.length; i++) {
-      filterListIngredients.innerHTML +=`<span>${arrayIngredientsUniques[i]}</span>`;
-    }
-})
-
-
-// function filterByTag(arrayOfRecipes, input) {
-//     filterHidden.classList.toggle("filter-hidden");
-//     filterHidden.classList.toggle("filter-visible");
-//     const ingredientsArr = [];
-//     const appareilsArr = [];
-//     const ustensilesArr = [];
-//     arrayOfRecipes.forEach((recipe) => {
-//         if (recipe.appliance) {
-//           appareilsArr.push(recipe.appliance);
-//         }
-//     });
-// }
-
-
-// appareilsIcon.classList.toggle("fa-angle-down");
-// appareilsIcon.classList.toggle("fa-angle-up");
-// ustensilsIcon.classList.toggle("fa-angle-down");
-// ustensilsIcon.classList.toggle("fa-angle-up");
-
-const filterAppareils = document.getElementById("filter-appareils");
-const appareilsIcon = document.getElementById("ingredients-icon");
-const filterListAppareils = document.querySelector(".filter-list-appareils");
-const filterHiddenAppareils = document.querySelector(".filter-hidden-appareils");
-const appareilsArr = [];
-
-
-filterAppareils.addEventListener("click", function(){
-  appareilsIcon.classList.toggle("fa-angle-down");
-  appareilsIcon.classList.toggle("fa-angle-up");
-  filterHiddenAppareils.classList.toggle("filter-hidden-appareils");
-  filterHiddenAppareils.classList.toggle("filter-visible");
-  filterListAppareils.innerHTML = "";
-  recipesList.forEach((recipe) => {
-      const name = recipe.name;
-      if (recipe.appliance) {
-        appareilsArr.push(recipe.appliance);
-      }
-  })
-  const arrayAppareilsUniques = [...new Set(appareilsArr)];
-  for (let i = 0; i < arrayAppareilsUniques.length; i++) {
-      filterListAppareils.innerHTML +=`<span>${arrayAppareilsUniques[i]}</span>`;
-  }
-})
-
-
-const filterUstensils = document.getElementById("filter-ustensils");
-const ustensilsIcon = document.getElementById("ingredients-icon");
-const filterListUstensils = document.querySelector(".filter-list-ustensils");
-const filterHiddenUstensils = document.querySelector(".filter-hidden-ustensils");
-const ustensilsArr = [];
-
-
-filterUstensils.addEventListener("click", function(){
-  ustensilsIcon.classList.toggle("fa-angle-down");
-  ustensilsIcon.classList.toggle("fa-angle-up");
-  filterHiddenUstensils.classList.toggle("filter-hidden-ustensils");
-  filterHiddenUstensils.classList.toggle("filter-visible");
-  filterListUstensils.innerHTML = "";
-  recipesList.forEach((recipe) => {
-      const name = recipe.name;
-      if (recipe.ustensils) {
-        ustensilsArr.push(recipe.ustensils);
-      }
-  })
-  console.log(ustensilsArr);
-  const flattenedUstensils = ustensilsArr.flat();
-  const arrayUstensilsUniques = [...new Set(flattenedUstensils)];
-  for (let i = 0; i < arrayUstensilsUniques.length; i++) {
-      filterListUstensils.innerHTML +=`<span class="">${capitalize(arrayUstensilsUniques[i])}</span>`;
-  }
-})
-
 
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
+
+
+function setupFilter(filterElement, iconElement, hiddenElement, listElement, dataArr, property) {
+  filterElement.addEventListener("click", function() {
+    iconElement.classList.toggle("fa-angle-down");
+    iconElement.classList.toggle("fa-angle-up");
+    hiddenElement.classList.toggle(`filter-hidden-${property}`);
+    hiddenElement.classList.toggle(`filter-visible-${property}`);
+    listElement.innerHTML = "";
+
+    recipesList.forEach((recipe) => {
+        const name = recipe.name;
+        if (property === "ingredients") {
+            if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
+                    recipe.ingredients.forEach((ingredient) => {
+                        if (ingredient && ingredient.ingredient) {
+                          dataArr.push(ingredient.ingredient);
+                        }
+                    });
+            }
+        } else {
+            if (recipe[property]) {
+                dataArr.push(recipe[property]);
+            }
+        }
+    });
+
+    const flattenedData = dataArr.flat();
+    const arrayDataUniques = [...new Set(flattenedData)];
+
+    for (let i = 0; i < arrayDataUniques.length; i++) {
+      listElement.innerHTML += `<span>${capitalize(arrayDataUniques[i])}</span>`;
+    }
+  });
+}
+
+// Utilisation pour les ustensiles
+const filterUstensils = document.getElementById("filter-ustensils");
+const ustensilsIcon = document.getElementById("ustensils-icon");
+const filterListUstensils = document.querySelector(".filter-list-ustensils");
+const filterHiddenUstensils = document.querySelector(".filter-hidden-ustensils");
+const ustensilsArr = [];
+setupFilter(filterUstensils, ustensilsIcon, filterHiddenUstensils, filterListUstensils, ustensilsArr, "ustensils");
+
+// Utilisation pour les appareils
+const filterAppareils = document.getElementById("filter-appliance");
+const appareilsIcon = document.getElementById("appliance-icon");
+const filterListAppareils = document.querySelector(".filter-list-appliance");
+const filterHiddenAppareils = document.querySelector(".filter-hidden-appliance");
+const appareilsArr = [];
+setupFilter(filterAppareils, appareilsIcon, filterHiddenAppareils, filterListAppareils, appareilsArr, "appliance");
+
+// Utilisation pour les ingrédients
+const filterIngredients = document.getElementById("filter-ingredients");
+const ingredientsIcon = document.getElementById("ingredients-icon");
+const filterHiddenIngredients = document.querySelector(".filter-hidden-ingredients");
+const filterListIngredients = document.querySelector(".filter-list-ingredients");
+const ingredientsArr = [];
+setupFilter(filterIngredients, ingredientsIcon, filterHiddenIngredients, filterListIngredients, ingredientsArr, "ingredients");
