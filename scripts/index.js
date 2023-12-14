@@ -81,6 +81,7 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, dat
     iconElement.classList.toggle("fa-angle-up");
     hiddenElement.classList.toggle(`filter-hidden-${property}`);
     hiddenElement.classList.toggle(`filter-visible-${property}`);
+
     listElement.innerHTML = "";
 
     recipesList.forEach((recipe) => {
@@ -104,8 +105,16 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, dat
     const arrayDataUniques = [...new Set(flattenedData)];
 
     for (let i = 0; i < arrayDataUniques.length; i++) {
-      listElement.innerHTML += `<span>${capitalize(arrayDataUniques[i])}</span>`;
+      listElement.innerHTML += `<span class="backgroundElement tag">${capitalize(arrayDataUniques[i])}</span>`;
     }
+
+    const tags = document.querySelectorAll(".tag");
+    const SelectedTags = document.querySelector(`.selectedTags-${property}`);
+    tags.forEach((tag) => {
+        tag.addEventListener("click", function() {
+          SelectedTags.innerHTML += `<span class="selectedTags-${property}">${tag.textContent}</span>`;
+        })
+    })
   });
 }
 
@@ -132,3 +141,12 @@ const filterHiddenIngredients = document.querySelector(".filter-hidden-ingredien
 const filterListIngredients = document.querySelector(".filter-list-ingredients");
 const ingredientsArr = [];
 setupFilter(filterIngredients, ingredientsIcon, filterHiddenIngredients, filterListIngredients, ingredientsArr, "ingredients");
+
+
+
+// const tag = document.querySelectorAll(".tag");
+
+// function selectedTag () {
+
+
+// }
