@@ -39,6 +39,14 @@ init();
 
 function searchInRecipes(arrayOfRecipes, input) {
     const temporyRecipesArr = [];
+    const reset = document.getElementById("search-cancel");
+    if (input.length >= 1) {
+        reset.style.display = "inline";
+        reset.style.left = "-90px"
+
+    } else {
+        reset.style.display = "none";
+    }
     if (input.length >= 3) {
         const searchIcon = document.getElementById("search-icon");
         const recipesSection = document.querySelector(".card-recipe-container");
@@ -112,7 +120,7 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, dat
     const SelectedTags = document.querySelector(`.selectedTags-${property}`);
     tags.forEach((tag) => {
         tag.addEventListener("click", function() {
-          SelectedTags.innerHTML += `<span class="selectedTags-${property}">${tag.textContent}</span>`;
+          SelectedTags.innerHTML +=`<span class="selectedTags-${property}">${tag.textContent}</span>`;
         })
     })
   });
@@ -141,12 +149,3 @@ const filterHiddenIngredients = document.querySelector(".filter-hidden-ingredien
 const filterListIngredients = document.querySelector(".filter-list-ingredients");
 const ingredientsArr = [];
 setupFilter(filterIngredients, ingredientsIcon, filterHiddenIngredients, filterListIngredients, ingredientsArr, "ingredients");
-
-
-
-// const tag = document.querySelectorAll(".tag");
-
-// function selectedTag () {
-
-
-// }

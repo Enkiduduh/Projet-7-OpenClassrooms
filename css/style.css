@@ -50,6 +50,7 @@ header h3 {
   width: 100%;
   text-align: center;
   margin: 20px;
+  z-index: 0;
 }
 .header-searchbar input {
   width: 700px;
@@ -60,11 +61,20 @@ header h3 {
 
 #search-icon {
   position: relative;
-  left: -45px;
+  left: -50px;
   color: white;
   background: black;
   padding: 12px;
   border-radius: 10px;
+  z-index: 2;
+}
+
+#search-cancel {
+  display: none;
+  position: relative;
+  left: -90px;
+  color: grey;
+  z-index: 2;
 }
 
 .navbar-filter {
