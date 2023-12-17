@@ -33,22 +33,28 @@ async function init() {
     const { recipes } = await getRecipes();
     displayData(recipes);
 }
-
 init();
 
+const searchBar = document.getElementById("searchbar");
+const searchIcon = document.getElementById("search-icon");
 
 function searchInRecipes(arrayOfRecipes, input) {
     const temporyRecipesArr = [];
-    const reset = document.getElementById("search-cancel");
+    const reset = document.querySelector(".fa-xmark");
+    const recipesSection = document.querySelector(".card-recipe-container");
     if (input.length >= 1) {
         reset.style.display = "inline";
-        reset.style.left = "-90px"
-
+        reset.addEventListener("click", function() {
+          console.log(searchBar.textContent)
+            searchBar.value = "";
+            reset.style.display = "none";
+            recipesSection.innerHTML = "";
+            displayData(arrayOfRecipes);
+        })
     } else {
         reset.style.display = "none";
     }
     if (input.length >= 3) {
-        const searchIcon = document.getElementById("search-icon");
         const recipesSection = document.querySelector(".card-recipe-container");
         // searchIcon.addEventListener("click", function() {
             recipesSection.innerHTML = "";
@@ -66,9 +72,10 @@ function searchInRecipes(arrayOfRecipes, input) {
     }
 }
 
-const searchBar = document.getElementById("searchbar");
 searchBar.addEventListener("click", function(){
-    searchBar.value = "";
+    const recipesSection = document.querySelector(".card-recipe-container");
+    recipesSection.innerHTML = "";
+    init();
     searchBar.addEventListener("input", function(){
         console.log("Input event triggered");
         searchBar.textContent = "";
@@ -83,7 +90,9 @@ function capitalize(str) {
 }
 
 
-function setupFilter(filterElement, iconElement, hiddenElement, listElement, dataArr, property) {
+function setupFilter(filterElement, iconElement, hiddenElement, listElement, selectedTagsElement, property) {
+  let dataArr = [];
+
   filterElement.addEventListener("click", function() {
     iconElement.classList.toggle("fa-angle-down");
     iconElement.classList.toggle("fa-angle-up");
@@ -92,21 +101,23 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, dat
 
     listElement.innerHTML = "";
 
+    dataArr = [];
+
     recipesList.forEach((recipe) => {
-        const name = recipe.name;
-        if (property === "ingredients") {
-            if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
-                    recipe.ingredients.forEach((ingredient) => {
-                        if (ingredient && ingredient.ingredient) {
-                          dataArr.push(ingredient.ingredient);
-                        }
-                    });
+      const name = recipe.name;
+      if (property === "ingredients") {
+        if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
+          recipe.ingredients.forEach((ingredient) => {
+            if (ingredient && ingredient.ingredient) {
+              dataArr.push(ingredient.ingredient);
             }
-        } else {
-            if (recipe[property]) {
-                dataArr.push(recipe[property]);
-            }
+          });
         }
+      } else {
+        if (recipe[property]) {
+          dataArr.push(recipe[property]);
+        }
+      }
     });
 
     const flattenedData = dataArr.flat();
@@ -116,13 +127,24 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, dat
       listElement.innerHTML += `<span class="backgroundElement tag">${capitalize(arrayDataUniques[i])}</span>`;
     }
 
+    // Réinitialisez les événements de clic ici
     const tags = document.querySelectorAll(".tag");
-    const SelectedTags = document.querySelector(`.selectedTags-${property}`);
     tags.forEach((tag) => {
-        tag.addEventListener("click", function() {
-          SelectedTags.innerHTML +=`<span class="selectedTags-${property}">${tag.textContent}</span>`;
-        })
-    })
+      tag.removeEventListener("click", tagClickHandler);
+      tag.addEventListener("click", tagClickHandler);
+    });
+  });
+
+  // Gérez le clic sur les tags ici
+  function tagClickHandler() {
+    selectedTagsElement.innerHTML += `<span class="selectedTags-${property}">${this.textContent}</span>`;
+  }
+
+  // Attachez initialement les événements de clic
+  const tags = document.querySelectorAll(".tag");
+  tags.forEach((tag) => {
+    tag.removeEventListener("click", tagClickHandler);
+    tag.addEventListener("click", tagClickHandler);
   });
 }
 
@@ -131,21 +153,21 @@ const filterUstensils = document.getElementById("filter-ustensils");
 const ustensilsIcon = document.getElementById("ustensils-icon");
 const filterListUstensils = document.querySelector(".filter-list-ustensils");
 const filterHiddenUstensils = document.querySelector(".filter-hidden-ustensils");
-const ustensilsArr = [];
-setupFilter(filterUstensils, ustensilsIcon, filterHiddenUstensils, filterListUstensils, ustensilsArr, "ustensils");
+const selectedTagsUstensils = document.querySelector(".selectedTags-ustensils");
+setupFilter(filterUstensils, ustensilsIcon, filterHiddenUstensils, filterListUstensils, selectedTagsUstensils, "ustensils");
 
 // Utilisation pour les appareils
 const filterAppareils = document.getElementById("filter-appliance");
 const appareilsIcon = document.getElementById("appliance-icon");
 const filterListAppareils = document.querySelector(".filter-list-appliance");
 const filterHiddenAppareils = document.querySelector(".filter-hidden-appliance");
-const appareilsArr = [];
-setupFilter(filterAppareils, appareilsIcon, filterHiddenAppareils, filterListAppareils, appareilsArr, "appliance");
+const selectedTagsAppareils = document.querySelector(".selectedTags-appliance");
+setupFilter(filterAppareils, appareilsIcon, filterHiddenAppareils, filterListAppareils, selectedTagsAppareils, "appliance");
 
 // Utilisation pour les ingrédients
 const filterIngredients = document.getElementById("filter-ingredients");
 const ingredientsIcon = document.getElementById("ingredients-icon");
 const filterHiddenIngredients = document.querySelector(".filter-hidden-ingredients");
 const filterListIngredients = document.querySelector(".filter-list-ingredients");
-const ingredientsArr = [];
-setupFilter(filterIngredients, ingredientsIcon, filterHiddenIngredients, filterListIngredients, ingredientsArr, "ingredients");
+const selectedTagsIngredients = document.querySelector(".selectedTags-ingredients");
+setupFilter(filterIngredients, ingredientsIcon, filterHiddenIngredients, filterListIngredients, selectedTagsIngredients, "ingredients");

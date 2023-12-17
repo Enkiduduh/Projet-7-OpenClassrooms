@@ -47,34 +47,43 @@ header h3 {
 }
 
 .header-searchbar {
-  width: 100%;
+  width: 800px;
   text-align: center;
-  margin: 20px;
+  margin: 20px auto;
   z-index: 0;
+  display: flex;
+  border: 1px solid white;
+  background: white;
+  border-radius: 11px;
+  align-items: center;
 }
 .header-searchbar input {
   width: 700px;
   height: 50px;
   border-radius: 11px;
   color: grey;
+  border: none;
+  outline: none;
 }
-
-#search-icon {
-  position: relative;
-  left: -50px;
+.header-searchbar #search-cancel {
+  width: 40px;
+  left: -90px;
+  color: grey;
+  z-index: 5;
+}
+.header-searchbar #search-cancel .fa-xmark {
+  display: none;
+}
+.header-searchbar #search-icon {
+  width: 20px;
   color: white;
   background: black;
   padding: 12px;
   border-radius: 10px;
   z-index: 2;
-}
-
-#search-cancel {
-  display: none;
   position: relative;
-  left: -90px;
-  color: grey;
-  z-index: 2;
+  top: 0px;
+  left: 6px;
 }
 
 .navbar-filter {
