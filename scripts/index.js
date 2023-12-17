@@ -37,10 +37,11 @@ init();
 
 const searchBar = document.getElementById("searchbar");
 const searchIcon = document.getElementById("search-icon");
+// const temporyRecipesArrForFilter = [];
 
 function searchInRecipes(arrayOfRecipes, input) {
-    const temporyRecipesArr = [];
-    const reset = document.querySelector(".fa-xmark");
+  const temporyRecipesArr = [];
+  const reset = document.querySelector(".fa-xmark");
     const recipesSection = document.querySelector(".card-recipe-container");
     if (input.length >= 1) {
         reset.style.display = "inline";
@@ -65,8 +66,8 @@ function searchInRecipes(arrayOfRecipes, input) {
                     recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(lowerInput))
                 ) {
                     temporyRecipesArr.push(recipe);
-                }
-            });
+                  }
+                });
             displayData(temporyRecipesArr);
         // });
     }
@@ -90,9 +91,7 @@ function capitalize(str) {
 }
 
 
-function setupFilter(filterElement, iconElement, hiddenElement, listElement, selectedTagsElement, property) {
-  let dataArr = [];
-
+function setupFilter(filterElement, iconElement, hiddenElement, listElement, selectedTagsElement, dataObj, property) {
   filterElement.addEventListener("click", function() {
     iconElement.classList.toggle("fa-angle-down");
     iconElement.classList.toggle("fa-angle-up");
@@ -101,50 +100,43 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, sel
 
     listElement.innerHTML = "";
 
-    dataArr = [];
-
     recipesList.forEach((recipe) => {
-      const name = recipe.name;
       if (property === "ingredients") {
         if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
           recipe.ingredients.forEach((ingredient) => {
             if (ingredient && ingredient.ingredient) {
-              dataArr.push(ingredient.ingredient);
+              dataObj[property].push(ingredient.ingredient);
             }
           });
         }
       } else {
         if (recipe[property]) {
-          dataArr.push(recipe[property]);
+          dataObj[property].push(recipe[property]);
         }
       }
     });
 
-    const flattenedData = dataArr.flat();
+    const flattenedData = dataObj[property].flat();
     const arrayDataUniques = [...new Set(flattenedData)];
 
     for (let i = 0; i < arrayDataUniques.length; i++) {
       listElement.innerHTML += `<span class="backgroundElement tag">${capitalize(arrayDataUniques[i])}</span>`;
     }
 
-    // Réinitialisez les événements de clic ici
-    const tags = document.querySelectorAll(".tag");
-    tags.forEach((tag) => {
-      tag.removeEventListener("click", tagClickHandler);
-      tag.addEventListener("click", tagClickHandler);
-    });
-  });
-
-  // Gérez le clic sur les tags ici
-  function tagClickHandler() {
-    selectedTagsElement.innerHTML += `<span class="selectedTags-${property}">${this.textContent}</span>`;
-  }
-
-  // Attachez initialement les événements de clic
+    // Supprimer les anciens écouteurs d'événements
   const tags = document.querySelectorAll(".tag");
   tags.forEach((tag) => {
-    tag.removeEventListener("click", tagClickHandler);
-    tag.addEventListener("click", tagClickHandler);
+    tag.removeEventListener("click", handleTagClick);
+  });
+
+  // Ajouter de nouveaux écouteurs d'événements
+  tags.forEach((tag) => {
+    tag.addEventListener("click", () => handleTagClick(tag));
+  });
+
+    function handleTagClick(clickedTag) {
+      selectedTagsElement.innerHTML += `<span class="selectedTags-${property}">${clickedTag.textContent}</span>`;
+    }
   });
 }
 
@@ -154,7 +146,8 @@ const ustensilsIcon = document.getElementById("ustensils-icon");
 const filterListUstensils = document.querySelector(".filter-list-ustensils");
 const filterHiddenUstensils = document.querySelector(".filter-hidden-ustensils");
 const selectedTagsUstensils = document.querySelector(".selectedTags-ustensils");
-setupFilter(filterUstensils, ustensilsIcon, filterHiddenUstensils, filterListUstensils, selectedTagsUstensils, "ustensils");
+const ustensilsData = { ustensils: [] };
+setupFilter(filterUstensils, ustensilsIcon, filterHiddenUstensils, filterListUstensils, selectedTagsUstensils, ustensilsData, "ustensils");
 
 // Utilisation pour les appareils
 const filterAppareils = document.getElementById("filter-appliance");
@@ -162,7 +155,8 @@ const appareilsIcon = document.getElementById("appliance-icon");
 const filterListAppareils = document.querySelector(".filter-list-appliance");
 const filterHiddenAppareils = document.querySelector(".filter-hidden-appliance");
 const selectedTagsAppareils = document.querySelector(".selectedTags-appliance");
-setupFilter(filterAppareils, appareilsIcon, filterHiddenAppareils, filterListAppareils, selectedTagsAppareils, "appliance");
+const appareilsData = { appliance: [] };
+setupFilter(filterAppareils, appareilsIcon, filterHiddenAppareils, filterListAppareils, selectedTagsAppareils, appareilsData, "appliance");
 
 // Utilisation pour les ingrédients
 const filterIngredients = document.getElementById("filter-ingredients");
@@ -170,4 +164,5 @@ const ingredientsIcon = document.getElementById("ingredients-icon");
 const filterHiddenIngredients = document.querySelector(".filter-hidden-ingredients");
 const filterListIngredients = document.querySelector(".filter-list-ingredients");
 const selectedTagsIngredients = document.querySelector(".selectedTags-ingredients");
-setupFilter(filterIngredients, ingredientsIcon, filterHiddenIngredients, filterListIngredients, selectedTagsIngredients, "ingredients");
+const ingredientsData = { ingredients: [] };
+setupFilter(filterIngredients, ingredientsIcon, filterHiddenIngredients, filterListIngredients, selectedTagsIngredients, ingredientsData, "ingredients");
