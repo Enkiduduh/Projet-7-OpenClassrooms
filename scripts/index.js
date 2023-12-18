@@ -37,10 +37,9 @@ init();
 
 const searchBar = document.getElementById("searchbar");
 const searchIcon = document.getElementById("search-icon");
-// const temporyRecipesArrForFilter = [];
+let temporyRecipesArr = [];
 
 function searchInRecipes(arrayOfRecipes, input) {
-  const temporyRecipesArr = [];
   const reset = document.querySelector(".fa-xmark");
     const recipesSection = document.querySelector(".card-recipe-container");
     if (input.length >= 1) {
@@ -68,8 +67,8 @@ function searchInRecipes(arrayOfRecipes, input) {
                     temporyRecipesArr.push(recipe);
                   }
                 });
-            displayData(temporyRecipesArr);
         // });
+        displayData(temporyRecipesArr);
     }
 }
 
@@ -80,16 +79,14 @@ searchBar.addEventListener("click", function(){
     searchBar.addEventListener("input", function(){
         console.log("Input event triggered");
         searchBar.textContent = "";
+        temporyRecipesArr = [];
         searchInRecipes(recipesList, searchBar.value);
     });
 });
 
-
-
 function capitalize(str) {
     return str.charAt(0).toUpperCase() + str.slice(1);
 }
-
 
 function setupFilter(filterElement, iconElement, hiddenElement, listElement, selectedTagsElement, dataObj, property) {
   filterElement.addEventListener("click", function() {
@@ -99,22 +96,39 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, sel
     hiddenElement.classList.toggle(`filter-visible-${property}`);
 
     listElement.innerHTML = "";
-
-    recipesList.forEach((recipe) => {
-      if (property === "ingredients") {
-        if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
-          recipe.ingredients.forEach((ingredient) => {
-            if (ingredient && ingredient.ingredient) {
-              dataObj[property].push(ingredient.ingredient);
+    if (temporyRecipesArr == []) {
+        temporyRecipesArr.forEach((recipe) => {
+          if (property === "ingredients") {
+            if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
+              recipe.ingredients.forEach((ingredient) => {
+                if (ingredient && ingredient.ingredient) {
+                  dataObj[property].push(ingredient.ingredient);
+                }
+              });
             }
-          });
+          } else {
+            if (recipe[property]) {
+              dataObj[property].push(recipe[property]);
+            }
+          }
+        });
+    } else {
+      recipesList.forEach((recipe) => {
+        if (property === "ingredients") {
+          if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
+            recipe.ingredients.forEach((ingredient) => {
+              if (ingredient && ingredient.ingredient) {
+                dataObj[property].push(ingredient.ingredient);
+              }
+            });
+          }
+        } else {
+          if (recipe[property]) {
+            dataObj[property].push(recipe[property]);
+          }
         }
-      } else {
-        if (recipe[property]) {
-          dataObj[property].push(recipe[property]);
-        }
-      }
-    });
+      });
+    }
 
     const flattenedData = dataObj[property].flat();
     const arrayDataUniques = [...new Set(flattenedData)];

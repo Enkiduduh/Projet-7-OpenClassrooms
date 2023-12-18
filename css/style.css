@@ -176,4 +176,17 @@ header h3 {
   color: white;
   background: grey;
   border: 1px solid black;
+}
+
+.listTags {
+  display: flex;
+}
+.listTags .tag {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 10px;
+  border: 1px solid black;
+  background: yellow;
+  width: 80px;
+  margin: 5px 10px;
 }/*# sourceMappingURL=style.css.map */
