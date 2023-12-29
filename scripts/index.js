@@ -49,6 +49,7 @@ function searchInRecipes(arrayOfRecipes, input) {
             searchBar.value = "";
             reset.style.display = "none";
             recipesSection.innerHTML = "";
+            temporyRecipesArr = [];
             displayData(arrayOfRecipes);
         })
     } else {
@@ -96,7 +97,7 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, sel
     hiddenElement.classList.toggle(`filter-visible-${property}`);
 
     listElement.innerHTML = "";
-    if (temporyRecipesArr == []) {
+    if (temporyRecipesArr.length !== 0) {
         temporyRecipesArr.forEach((recipe) => {
           if (property === "ingredients") {
             if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
@@ -136,34 +137,47 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, sel
     for (let i = 0; i < arrayDataUniques.length; i++) {
       listElement.innerHTML += `<span class="backgroundElement tag">${capitalize(arrayDataUniques[i])}</span>`;
     }
-
-    // Supprimer les anciens écouteurs d'événements
-  const tags = document.querySelectorAll(".tag");
-  // tags.forEach((tag) => {
-  //   tag.removeEventListener("click", handleTagClick);
-  // });
-
-  // Ajouter de nouveaux écouteurs d'événements
-  tags.forEach((tag) => {
-      tag.addEventListener("click", function (){
-        console.log(tag)
-          if (tag.parentElement.classList.contains("filter-list-ingredients")) {
-              tagsList.ing.push(tag.textContent)
-              console.log("a")
-          } else if (tag.parentElement.classList.contains("filter-list-appliance")){
-              tagsList.app.push(tag.textContent)
-              console.log("b")
-          } else if (tag.parentElement.classList.contains("filter-list-ustensils")) {
-              tagsList.ust.push(tag.textContent)
-              console.log("c")
-          }
-          showTagsList(tagsList);
-      });
+    let temporyRecipeHolderFilter = [];
+    const tags = document.querySelectorAll(".tag");
+    tags.forEach((tag) => {
+        tag.addEventListener("click", function (){
+        const input = tag.textContent;
+        const lowerInput = input.toLowerCase();
+        const recipesSection = document.querySelector(".card-recipe-container");
+        if (tag.parentElement.classList.contains("filter-list-ingredients")) {
+            tagsList.ing.push(tag.textContent)
+            recipesList.forEach((recipe) => {
+              if (recipe.name.includes(lowerInput) || recipe.description.includes(lowerInput) ||
+              recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(lowerInput))) {
+                   recipesSection.innerHTML = "";
+                   temporyRecipeHolderFilter.push(recipe);
+                }
+              })
+        }
+        if (tag.parentElement.classList.contains("filter-list-appliance")){
+            tagsList.app.push(tag.textContent)
+            recipesList.forEach((recipe) => {
+                if (recipe.appliance.includes(lowerInput) || recipe.description.includes(lowerInput)) {
+                    temporyRecipeHolderFilter.push(recipe);
+                    recipesSection.innerHTML = "";
+                }
+            })
+        }
+        if (tag.parentElement.classList.contains("filter-list-ustensils")) {
+            tagsList.ust.push(tag.textContent)
+            recipesList.forEach((recipe) => {
+                if (recipe.ustensils.includes(lowerInput) || recipe.description.includes(lowerInput)) {
+                    temporyRecipeHolderFilter.push(recipe);
+                    recipesSection.innerHTML = "";
+                }
+            })
+        }
+            showTagsList(tagsList);
+            displayData(temporyRecipeHolderFilter);
+        });
   });
 
-    // function handleTagClick(clickedTag) {
-    //   selectedTagsElement.innerHTML += `<span class="selectedTags-${property}">${clickedTag.textContent}</span>`;
-    // }
+
   });
 }
 

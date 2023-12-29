@@ -1,10 +1,5 @@
 
 const listTagsHtml = document.querySelector(".listTags");
-// const tagsList = {
-//     ing: ["carotte", "courgette"],
-//     app: ["blender", "four"],
-//     ust: ["couteau", "bol"]
-// }
 
 const tagsList = {
   ing: [],
@@ -54,6 +49,8 @@ function showTagsList (arrayOfTagList) {
         });
     });
 }
+
+
 
 showTagsList(tagsList);
 // tagsCancel.forEach(tag => {
