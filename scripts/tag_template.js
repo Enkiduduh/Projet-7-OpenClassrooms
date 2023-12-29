@@ -1,9 +1,15 @@
 
 const listTagsHtml = document.querySelector(".listTags");
+// const tagsList = {
+//     ing: ["carotte", "courgette"],
+//     app: ["blender", "four"],
+//     ust: ["couteau", "bol"]
+// }
+
 const tagsList = {
-    ing: ["carotte", "courgette", "navet"],
-    app: ["blender", "four"],
-    ust: ["couteau", "bol"]
+  ing: [],
+  app: [],
+  ust: []
 }
 let tagsCancel;
 
@@ -11,32 +17,44 @@ function showTagsList (arrayOfTagList) {
     let tagListModelHtml = "";
     if (arrayOfTagList.ing.length > 0) {
       arrayOfTagList.ing.forEach((tag, index)  => {
-        tagListModelHtml += `<div class="tag">
+        tagListModelHtml += `<div class="show-tag">
         <span>${tag}</span>
-        <span onclick="deleteTagsList(${index},'ing')" class="tag-cancel ing">x</span>
+        <span onclick="deleteTagsList(${index},'ing')" class="delete-tag ing"><i class="fa-solid fa-xmark "></i></span>
       </div>`;
       });
     }
     if (arrayOfTagList.app.length > 0) {
       arrayOfTagList.app.forEach((tag, index) => {
-        tagListModelHtml += `<div class="tag">
+        tagListModelHtml += `<div class="show-tag">
         <span>${tag}</span>
-        <span onclick="deleteTagsList(${index},'app')" class="tag-cancel app">x</span>
+        <span onclick="deleteTagsList(${index},'app')" class=" delete-tag app"><i class="fa-solid fa-xmark "></i></span>
       </div>`;
       });
     }
     if (arrayOfTagList.ust.length > 0) {
       arrayOfTagList.ust.forEach((tag, index) => {
-        tagListModelHtml += `<div class="tag">
+        tagListModelHtml += `<div class="show-tag">
         <span>${tag}</span>
-        <span onclick="deleteTagsList(${index},'ust')" class="tag-cancel ust">x</span>
+        <span onclick="deleteTagsList(${index},'ust')" class="delete-tag ust"><i class="fa-solid fa-xmark "></i></span>
       </div>`;
       });
     }
     listTagsHtml.innerHTML = tagListModelHtml;
-    tagsCancel = document.querySelectorAll(".tag-cancel");
 
+    const deleteIcons = document.querySelectorAll(".delete-tag");
+    deleteIcons.forEach((icon) => {
+        icon.style.visibility = "hidden";
+
+        icon.parentElement.addEventListener("mouseenter", function () {
+            icon.style.visibility = "visible";
+        });
+
+        icon.parentElement.addEventListener("mouseleave", function () {
+            icon.style.visibility = "hidden";
+        });
+    });
 }
+
 showTagsList(tagsList);
 // tagsCancel.forEach(tag => {
 //     tag.addEventListener("click", function(e) {

@@ -139,18 +139,31 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, sel
 
     // Supprimer les anciens écouteurs d'événements
   const tags = document.querySelectorAll(".tag");
-  tags.forEach((tag) => {
-    tag.removeEventListener("click", handleTagClick);
-  });
+  // tags.forEach((tag) => {
+  //   tag.removeEventListener("click", handleTagClick);
+  // });
 
   // Ajouter de nouveaux écouteurs d'événements
   tags.forEach((tag) => {
-    tag.addEventListener("click", () => handleTagClick(tag));
+      tag.addEventListener("click", function (){
+        console.log(tag)
+          if (tag.parentElement.classList.contains("filter-list-ingredients")) {
+              tagsList.ing.push(tag.textContent)
+              console.log("a")
+          } else if (tag.parentElement.classList.contains("filter-list-appliance")){
+              tagsList.app.push(tag.textContent)
+              console.log("b")
+          } else if (tag.parentElement.classList.contains("filter-list-ustensils")) {
+              tagsList.ust.push(tag.textContent)
+              console.log("c")
+          }
+          showTagsList(tagsList);
+      });
   });
 
-    function handleTagClick(clickedTag) {
-      selectedTagsElement.innerHTML += `<span class="selectedTags-${property}">${clickedTag.textContent}</span>`;
-    }
+    // function handleTagClick(clickedTag) {
+    //   selectedTagsElement.innerHTML += `<span class="selectedTags-${property}">${clickedTag.textContent}</span>`;
+    // }
   });
 }
 
