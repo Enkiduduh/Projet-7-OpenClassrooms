@@ -1,5 +1,6 @@
 let recipesList = [];
 
+
 async function getRecipes() {
     let response = await fetch("data/recipes.json");
 
@@ -95,9 +96,12 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, sel
     iconElement.classList.toggle("fa-angle-up");
     hiddenElement.classList.toggle(`filter-hidden-${property}`);
     hiddenElement.classList.toggle(`filter-visible-${property}`);
+    let temporyRecipeHolderFilter = [];
+    let temporySecondaryRecipeHolderFilter = [];
 
     listElement.innerHTML = "";
     if (temporyRecipesArr.length !== 0) {
+      console.log("test 1")
         temporyRecipesArr.forEach((recipe) => {
           if (property === "ingredients") {
             if (recipe.ingredients && Array.isArray(recipe.ingredients)) {
@@ -137,46 +141,54 @@ function setupFilter(filterElement, iconElement, hiddenElement, listElement, sel
     for (let i = 0; i < arrayDataUniques.length; i++) {
       listElement.innerHTML += `<span class="backgroundElement tag">${capitalize(arrayDataUniques[i])}</span>`;
     }
-    let temporyRecipeHolderFilter = [];
+
     const tags = document.querySelectorAll(".tag");
     tags.forEach((tag) => {
         tag.addEventListener("click", function (){
         const input = tag.textContent;
         const lowerInput = input.toLowerCase();
         const recipesSection = document.querySelector(".card-recipe-container");
-        if (tag.parentElement.classList.contains("filter-list-ingredients")) {
-            tagsList.ing.push(tag.textContent)
-            recipesList.forEach((recipe) => {
-              if (recipe.name.includes(lowerInput) || recipe.description.includes(lowerInput) ||
-              recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(lowerInput))) {
-                   recipesSection.innerHTML = "";
-                   temporyRecipeHolderFilter.push(recipe);
-                }
-              })
-        }
-        if (tag.parentElement.classList.contains("filter-list-appliance")){
-            tagsList.app.push(tag.textContent)
-            recipesList.forEach((recipe) => {
-                if (recipe.appliance.includes(lowerInput) || recipe.description.includes(lowerInput)) {
-                    temporyRecipeHolderFilter.push(recipe);
-                    recipesSection.innerHTML = "";
-                }
-            })
-        }
-        if (tag.parentElement.classList.contains("filter-list-ustensils")) {
-            tagsList.ust.push(tag.textContent)
-            recipesList.forEach((recipe) => {
-                if (recipe.ustensils.includes(lowerInput) || recipe.description.includes(lowerInput)) {
-                    temporyRecipeHolderFilter.push(recipe);
-                    recipesSection.innerHTML = "";
-                }
-            })
-        }
+        if (temporyRecipeHolderFilter.length == 0) {
+            if (tag.parentElement.classList.contains("filter-list-ingredients")) {
+                tagsList.ing.push(tag.textContent)
+                recipesList.forEach((recipe) => {
+                  if (recipe.name.includes(lowerInput) || recipe.description.includes(lowerInput) ||
+                  recipe.ingredients.some(ingredient => ingredient.ingredient.toLowerCase().includes(lowerInput))) {
+                      recipesSection.innerHTML = "";
+                      temporyRecipeHolderFilter.push(recipe);
+                    }
+                  })
+            }
+            if (tag.parentElement.classList.contains("filter-list-appliance")){
+                tagsList.app.push(tag.textContent)
+                recipesList.forEach((recipe) => {
+                    if (recipe.appliance.includes(lowerInput) || recipe.description.includes(lowerInput)) {
+                      recipesSection.innerHTML = "";
+                        temporyRecipeHolderFilter.push(recipe);
+                    }
+                })
+            }
+            if (tag.parentElement.classList.contains("filter-list-ustensils")) {
+                tagsList.ust.push(tag.textContent)
+                recipesList.forEach((recipe) => {
+                    if (recipe.name.includes(lowerInput) || recipe.description.includes(lowerInput) || recipe.ustensils.includes(lowerInput)) {
+                      recipesSection.innerHTML = "";
+                        temporyRecipeHolderFilter.push(recipe);
+                    }
+                })
+            }
+            temporyRecipesArr = [...temporyRecipeHolderFilter];
+            console.log(temporySecondaryRecipeHolderFilter)
+            console.log(temporyRecipesArr)
+            // displayData(temporyRecipeHolderFilter);
             showTagsList(tagsList);
-            displayData(temporyRecipeHolderFilter);
-        });
-  });
+            filterRecipesByTags();
+          }
+          console.log(temporyRecipesArr)
 
+        });
+
+  });
 
   });
 }
